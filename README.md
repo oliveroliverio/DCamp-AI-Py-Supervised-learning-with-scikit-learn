@@ -5,6 +5,15 @@
 
 
 ## Supervised learning
+![](img/2021-11-25-22-09-25.png)
+![](img/2021-11-25-22-09-52.png)
+![](img/2021-11-25-22-10-04.png)
+![](img/2021-11-25-22-10-15.png)
+![](img/2021-11-25-22-10-32.png)
+![](img/2021-11-25-22-10-42.png)
+![](img/2021-11-25-22-10-57.png)
+![](img/2021-11-25-22-11-11.png)
+
 
 ## Which of these is a classification problem?
 
