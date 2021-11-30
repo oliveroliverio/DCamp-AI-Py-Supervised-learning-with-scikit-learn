@@ -1,29 +1,67 @@
-
+# [Supervised learning with Scikit learn](https://www.datacamp.com/courses/supervised-learning-with-scikit-learn)
 
 # 1 Classification
 
 
 
 ## Supervised learning
-![](img/2021-11-25-22-09-25.png)
-![](img/2021-11-25-22-09-52.png)
-![](img/2021-11-25-22-10-04.png)
-![](img/2021-11-25-22-10-15.png)
-![](img/2021-11-25-22-10-32.png)
-![](img/2021-11-25-22-10-42.png)
-![](img/2021-11-25-22-10-57.png)
-![](img/2021-11-25-22-11-11.png)
 
 
 ## Which of these is a classification problem?
 
 ## Exploratory data analysis
+### Load Iris dataset
+```python
+from sklearn import datasets
+import pandas as pd
+
+import numpy as np
+
+import matpLotlib.pyplot as plt
+
+plt.style.use('ggplot')
+iris = datasets.load_iris()
+
+type(iris)
+```
+
+### View data types and dimensions in dataset
+
+```python
+type(iris.data)
+iris.data.shape
+iris.target_names
+```
+
+### Load as pandas dataframe
+```python
+X = iris.data
+y = iris.target
+df = pd.DataFrame(X, columns=iris.feature_names)
+print(df.head())
+```
 
 ## Numerical EDA
 
 ## Visual EDA
 
+```python
+_ = pd.plotting.scatter_matrix(df, c = y, figsize = [8, 8],
+s=150, marker = 'D')
+
+```
+
 ## The classification challenge
+
+### Using scikit-learn to fit a classifier
+
+```python
+from sklearn import datasets
+from sklearn.neighbors import KNeighborsClassifier
+knn = KNeighborsClassifier(n_neighbors=6)
+iris = datasets.load_iris()
+knn.fit(iris['data'], iris['target'])
+```
 
 ## k-Nearest Neighbors: Fit
 
@@ -31,12 +69,37 @@
 
 ## Measuring model performance
 
+### Train/test split
+```python
+from sklearn.model_selection import train_test_split
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=21, stratify=y)
+knn = KNeighborsClassifier(n_neighbors=8)
+knn.fit(X_train, y_train)
+y_pred = knn.predict(X_test)
+print(\"Test set predictions:\\n {}\".format(y_pred))
+
+```
+
+
 ## The digits recognition dataset
 
 ## Train/Test Split + Fit/Predict/Accuracy
 
 ## Overfitting and underfitting
 
+---
+
+
+
+
+
+
+
+
+
+
+---
 
 # 2 Regression
 
@@ -58,7 +121,7 @@
 
 ## Cross-validation
 
-5-fold cross-validation
+## 5-fold cross-validation
 
 ## K-Fold CV comparison
 
