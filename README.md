@@ -331,23 +331,172 @@ Inside the for loop:
 
 # 2 Regression
 
-
-
 ## Introduction to regression
+
+VID
 
 ## Which of the following is a regression problem?
 
+Which of the following is a regression problem?
+Andy introduced regression to you using the Boston housing dataset. But regression models can be used in a variety of contexts to solve a variety of different problems.
+
+Given below are four example applications of machine learning. Your job is to pick the one that is best framed as a regression problem.
+
+- An e-commerce company using labeled customer data to predict whether or not a customer will purchase a particular item.
+- A healthcare company using data about cancer tumors (such as their geometric measurements) to predict whether a new tumor is benign or malignant.
+- A restaurant using review data to ascribe positive or negative sentiment to a given review.
+- A bike share company using time and weather data to predict the number of bikes being rented at any given hour.
+
+Ans: bike share
+
 ## Importing data for supervised learning
+
+In this chapter, you will work with Gapminder data that we have consolidated into one CSV file available in the workspace as 'gapminder.csv'. Specifically, your goal will be to use this data to predict the life expectancy in a given country based on features such as the country's GDP, fertility rate, and population. As in Chapter 1, the dataset has been preprocessed.
+
+Since the target variable here is quantitative, this is a regression problem. To begin, you will fit a linear regression with just one feature: 'fertility', which is the average number of children a woman in a given country gives birth to. In later exercises, you will use all the features to build regression models.
+
+Before that, however, you need to import the data and get it into the form needed by scikit-learn. This involves creating feature and target variable arrays. Furthermore, since you are going to use only one feature to begin with, you need to do some reshaping using NumPy's .reshape() method. Don't worry too much about this reshaping right now, but it is something you will have to do occasionally when working with scikit-learn so it is useful to practice.
+
+- Import numpy and pandas as their standard aliases.
+- Read the file 'gapminder.csv' into a DataFrame df using the read_csv() function.
+- Create array X for the 'fertility' feature and array y for the 'life' target variable.
+- Reshape the arrays by using the .reshape() method and passing in -1 and 1.
+
+```python
+# Import numpy and pandas
+import numpy as np
+import pandas as pd
+
+# Read the CSV file into a DataFrame: df
+df = pd.read_csv("gapminder.csv")
+
+# Create arrays for features and target variable
+y = df['life'].values
+X = df['fertility'].values
+
+# Print the dimensions of y and X before reshaping
+print("Dimensions of y before reshaping: ", y.shape)
+print("Dimensions of X before reshaping: ", X.shape)
+
+# Reshape X and y
+# I still don't get why we do this part
+y_reshaped = y.reshape(-1,1)
+X_reshaped = X.reshape(-1,1)
+
+# Print the dimensions of y_reshaped and X_reshaped
+print("Dimensions of y after reshaping: ", y_reshaped.shape)
+print("Dimensions of X after reshaping: ", X_reshaped.shape)
+```
+
+
 
 ## Exploring the Gapminder data
 
-## The basics of linear regression
+As always, it is important to explore your data before building models. On the right, we have constructed a heatmap showing the correlation between the different features of the Gapminder dataset, which has been pre-loaded into a DataFrame as df and is available for exploration in the IPython Shell. Cells that are in green show positive correlation, while cells that are in red show negative correlation. Take a moment to explore this: Which features are positively correlated with life, and which ones are negatively correlated? Does this match your intuition?
 
+Then, in the IPython Shell, explore the DataFrame using pandas methods such as .info(), .describe(), .head().
+
+In case you are curious, the heatmap was generated using Seaborn's heatmap function and the following line of code, where df.corr() computes the pairwise correlation between columns:
+
+```python
+sns.heatmap(df.corr(), square=True, cmap='RdYlGn')
+```
+Once you have a feel for the data, consider the statements below and select the one that is not true. After this, Hugo will explain the mechanics of linear regression in the next video and you will be on your way building regression models!
+
+Possible Answers
+- The DataFrame has 139 samples (or rows) and 9 columns.
+- life and fertility are negatively correlated.
+- The mean of life is 69.602878.
+- fertility is of type int64 == ANS
+- GDP and life are positively correlated.
+
+## The basics of linear regression
+VID
 ## Fit & predict for regression
+
+Now, you will fit a linear regression and predict life expectancy using just one feature. You saw Andy do this earlier using the 'RM' feature of the Boston housing dataset. In this exercise, you will use the 'fertility' feature of the Gapminder dataset. Since the goal is to predict life expectancy, the target variable here is 'life'. The array for the target variable has been pre-loaded as y and the array for 'fertility' has been pre-loaded as X_fertility.
+
+A scatter plot with 'fertility' on the x-axis and 'life' on the y-axis has been generated. As you can see, there is a strongly negative correlation, so a linear regression should be able to capture this trend. Your job is to fit a linear regression and then predict the life expectancy, overlaying these predicted values on the plot to generate a regression line. You will also compute and print the  score using scikit-learn's .score() method.
+
+- Import LinearRegression from sklearn.linear_model.
+- Create a LinearRegression regressor called reg.
+- Set up the prediction space to range from the minimum to the maximum of X_fertility. This has been done for you.
+- Fit the regressor to the data (X_fertility and y) and compute its predictions using the .predict() method and the prediction_space array.
+- Compute and print the  score using the .score() method.
+- Overlay the plot with your linear regression line. This has been done for you, so hit 'Submit Answer' to see the result!
+
+Hint
+- You can import x from y using the command from y import x.
+- Use the function LinearRegression() to create the regressor.
+- Use the .fit() method on reg with X_fertility and y as arguments to fit the model.
+- Use the .predict() method on reg with prediction_space as the argument to compute the predictions.
+- Use the .score() method with X_fertility and y as arguments to compute the  score
+
+```python
+# Import LinearRegression
+from sklearn.linear_model import LinearRegression
+
+# Create the regressor: reg
+reg = LinearRegression()
+
+# Create the prediction space
+prediction_space = np.linspace(min(X_fertility), max(X_fertility)).reshape(-1,1)
+
+# Fit the model to the data
+reg.fit(X_fertility, y)
+
+# Compute predictions over the prediction space: y_pred
+y_pred = reg.predict(prediction_space)
+
+# Print R^2 
+print(reg.score(X_fertility, y))
+
+# Plot regression line
+plt.plot(prediction_space, y_pred, color='black', linewidth=3)
+plt.show()
+
+```
+
 
 ## Train/test split for regression
 
-## Cross-validation
+As you learned in Chapter 1, train and test sets are vital to ensure that your supervised learning model is able to generalize well to new data. This was true for classification models, and is equally true for linear regression models.
+
+In this exercise, you will split the Gapminder dataset into training and testing sets, and then fit and predict a linear regression over all features. In addition to computing the  score, you will also compute the Root Mean Squared Error (RMSE), which is another commonly used metric to evaluate regression models. The feature array X and target variable array y have been pre-loaded for you from the DataFrame df.
+
+- Import LinearRegression from sklearn.linear_model, mean_squared_error from sklearn.metrics, and train_test_split from sklearn.model_selection.
+- Using X and y, create training and test sets such that 30% is used for testing and 70% for training. Use a random state of 42.
+- Create a linear regression regressor called reg_all, fit it to the training set, and evaluate it on the test set.
+- Compute and print the  score using the .score() method on the test set.
+- Compute and print the RMSE. To do this, first compute the Mean Squared Error using the mean_squared_error() function with the arguments y_test and y_pred, and then take its square root using np.sqrt().
+
+```python
+# Import necessary modules
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error
+from sklearn.model_selection import train_test_split
+
+# Create training and test sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.3, random_state=42)
+
+# Create the regressor: reg_all
+reg_all = LinearRegression()
+
+# Fit the regressor to the training data
+reg_all.fit(X_train, y_train)
+
+# Predict on the test data: y_pred
+y_pred = reg_all.predict(X_test)
+
+# Compute and print R^2 and RMSE
+print("R^2: {}".format(reg_all.score(X_test, y_test)))
+rmse = np.sqrt(mean_squared_error(y_test, y_pred))
+print("Root Mean Squared Error: {}".format(rmse))
+
+```
+
+## [Cross-validation](https://campus.datacamp.com/courses/supervised-learning-with-scikit-learn/regression-2?ex=8)
+VID
 
 ## 5-fold cross-validation
 
@@ -358,7 +507,6 @@ Inside the for loop:
 ## Regularization I: Lasso
 
 ## Regularization II: Ridge
-
 
 # 3 Fine-tuning your model
 
