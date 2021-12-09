@@ -52,7 +52,76 @@ s=150, marker = 'D')
 ```
 
 ## The classification challenge
+![](img/2021-12-08-16-00-18.png)
+![](img/2021-12-08-16-01-30.png)
+- how to classify point in middle?
 
+![](img/2021-12-08-16-01-52.png)
+
+- if k = 3, classify as red
+
+![](img/2021-12-08-16-02-16.png)
+
+- if k = 5, then green
+
+![](img/2021-12-08-16-02-50.png)
+
+- iris dataset
+
+![](img/2021-12-08-16-03-20.png)
+
+- Knn algorithm creates decision boundary sets.  Visualize the 2D case below
+
+![](img/2021-12-08-16-03-55.png)
+
+- new data points that fall within these boundaries will be classified as follows
+
+![](img/2021-12-08-16-04-50.png)
+
+- All machine learning models implemented as python classes.  They implement learning and predicting models as well as storing info learned from data
+- Training a model = fitting
+
+![](img/2021-12-08-16-06-37.png)
+
+- Fit a classifier using scikit learn
+- Instantiate KKneighbors classifier with n_neighbors = 6, assign it to variable `knn`
+
+
+![](img/2021-12-08-17-02-39.png)
+
+
+- fit classifier to training set, the labelled data
+
+![](img/2021-12-08-17-03-06.png)
+
+ - both features (data) and target (labels) are numpy arrays
+ - Scikit learn api data requirements
+   - Data inputs must be numpy arrays or pandas dataframe
+   - features take on continuous values and not have missing data
+   - specifically features are in an array where each column is a feature and each row a different observation or datapoint
+
+![](img/2021-12-08-17-07-26.png)
+
+- looking at iris data, there are 150 observations and 4 features
+- target (labels) needs to be a single column with the same number of observations as feature data
+
+- what's returned from the classifier
+  - the classifier itself, and it modifies it to fit to the data...
+- now use it to fit on unlabelled data
+
+![](img/2021-12-08-17-09-47.png)
+
+- the `knn` object now has predict method after running the fit method.
+- Again the api requires that features are columns and observations are rows (typical to tidy data)
+- check the shape
+
+![](img/2021-12-08-17-11-29.png)
+
+
+
+- if you print the "prediction" it's an array of n predictions (number of rows) and prediction value (in this case, 1 = versicolor, 0 = setosa)
+
+![](img/2021-12-08-17-14-08.png)
 ### Using scikit-learn to fit a classifier
 
 ```python
@@ -83,6 +152,35 @@ print(\"Test set predictions:\\n {}\".format(y_pred))
 
 
 ## The digits recognition dataset
+
+Up until now, you have been performing binary classification, since the target variable had two possible outcomes. Hugo, however, got to perform multi-class classification in the videos, where the target variable could take on three possible outcomes. Why does he get to have all the fun?! In the following exercises, you'll be working with the MNIST digits recognition dataset, which has 10 classes, the digits 0 through 9! A reduced version of the MNIST dataset is one of scikit-learn's included datasets, and that is the one we will use in this exercise.
+
+Each sample in this scikit-learn dataset is an 8x8 image representing a handwritten digit. Each pixel is represented by an integer in the range 0 to 16, indicating varying levels of black. Recall that scikit-learn's built-in datasets are of type Bunch, which are dictionary-like objects. Helpfully for the MNIST dataset, scikit-learn provides an 'images' key in addition to the 'data' and 'target' keys that you have seen with the Iris data. Because it is a 2D array of the images corresponding to each sample, this 'images' key is useful for visualizing the images, as you'll see in this exercise (for more on plotting 2D arrays, see Chapter 2 of DataCamp's course on Data Visualization with Python). On the other hand, the 'data' key contains the feature array - that is, the images as a flattened array of 64 pixels.
+
+Notice that you can access the keys of these Bunch objects in two different ways: By using the . notation, as in digits.images, or the [] notation, as in digits['images'].
+
+For more on the MNIST data, check out this exercise in Part 1 of DataCamp's Importing Data in Python course. There, the full version of the MNIST dataset is used, in which the images are 28x28. It is a famous dataset in machine learning and computer vision, and frequently used as a benchmark to evaluate the performance of a new model.
+
+```python
+# Import necessary modules
+from sklearn import datasets
+import matplotlib.pyplot as plt
+
+# Load the digits dataset: digits
+digits = datasets.load_digits()
+
+# Print the keys and DESCR of the dataset
+print(digits.keys())
+print(digits.DESCR)
+
+# Print the shape of the images and data keys
+print(digits.images.shape)
+print(digits.data.shape)
+
+# Display digit 1010
+plt.imshow(digits.images[1010], cmap=plt.cm.gray_r, interpolation='nearest')
+plt.show()
+```
 
 ## Train/Test Split + Fit/Predict/Accuracy
 
