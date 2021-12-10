@@ -446,8 +446,15 @@ Possible Answers
 - fertility is of type int64 == ANS
 - GDP and life are positively correlated.
 
-## The basics of linear regression
-VID
+## [The basics of linear regression](https://campus.datacamp.com/courses/supervised-learning-with-scikit-learn/regression-2?ex=5)
+
+![](img/2021-12-09-18-18-01.png)
+![](img/2021-12-09-18-18-10.png)
+![](img/2021-12-09-18-18-37.png)
+![](img/2021-12-09-18-18-49.png)
+![](img/2021-12-09-18-18-58.png)
+
+
 ## Fit & predict for regression
 
 Now, you will fit a linear regression and predict life expectancy using just one feature. You saw Andy do this earlier using the 'RM' feature of the Boston housing dataset. In this exercise, you will use the 'fertility' feature of the Gapminder dataset. Since the goal is to predict life expectancy, the target variable here is 'life'. The array for the target variable has been pre-loaded as y and the array for 'fertility' has been pre-loaded as X_fertility.
@@ -532,15 +539,123 @@ print("Root Mean Squared Error: {}".format(rmse))
 ```
 
 ## [Cross-validation](https://campus.datacamp.com/courses/supervised-learning-with-scikit-learn/regression-2?ex=8)
-VID
+
+![](img/2021-12-09-18-19-30.png)
+![](img/2021-12-09-18-19-38.png)
+![](img/2021-12-09-18-19-45.png)
+![](img/2021-12-09-18-19-53.png)
+![](img/2021-12-09-18-20-01.png)
 
 ## 5-fold cross-validation
+Cross-validation is a vital step in evaluating a model. It maximizes the amount of data that is used to train the model, as during the course of training, the model is not only trained, but also tested on all of the available data.
+
+In this exercise, you will practice 5-fold cross validation on the Gapminder data. By default, scikit-learn's cross_val_score() function uses  as the metric of choice for regression. Since you are performing 5-fold cross-validation, the function will return 5 scores. Your job is to compute these 5 scores and then take their average.
+
+The DataFrame has been loaded as df and split into the feature/target variable arrays X and y. The modules pandas and numpy have been imported as pd and np, respectively.
+
+- Import LinearRegression from sklearn.linear_model and cross_val_score from sklearn.model_selection.
+- Create a linear regression regressor called reg.
+- Use the cross_val_score() function to perform 5-fold cross-validation on X and y.
+- Compute and print the average cross-validation score. You can use NumPy's mean() function to compute the average.
+
+```python
+# Import the necessary modules
+from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import cross_val_score
+
+# Create a linear regression object: reg
+reg = LinearRegression()
+
+# Compute 5-fold cross-validation scores: cv_scores
+cv_scores = cross_val_score(reg, X, y, cv=5)
+
+# Print the 5-fold cross-validation scores
+print(cv_scores)
+
+print("Average 5-Fold CV Score: {}".format(np.mean(cv_scores)))
+
+```
 
 ## K-Fold CV comparison
 
-## Regularized regression
+Cross validation is essential but do not forget that the more folds you use, the more computationally expensive cross-validation becomes. In this exercise, you will explore this for yourself. Your job is to perform 3-fold cross-validation and then 10-fold cross-validation on the Gapminder dataset.
+
+In the IPython Shell, you can use %timeit to see how long each 3-fold CV takes compared to 10-fold CV by executing the following cv=3 and cv=10:
+
+```python
+%timeit cross_val_score(reg, X, y, cv = ____)
+```
+
+pandas and numpy are available in the workspace as pd and np. The DataFrame has been loaded as df and the feature/target variable arrays X and y have been created.
+
+- Import LinearRegression from sklearn.linear_model and cross_val_score from sklearn.model_selection.
+- Create a linear regression regressor called reg.
+- Perform 3-fold CV and then 10-fold CV. Compare the resulting mean scores.
+
+```python
+# Import necessary modules
+from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import cross_val_score
+
+# Create a linear regression object: reg
+reg = LinearRegression()
+
+# Perform 3-fold CV
+cvscores_3 = cross_val_score(reg, X, y, cv=3)
+print(np.mean(cvscores_3))
+
+# Perform 10-fold CV
+cvscores_10 = cross_val_score(reg, X, y, cv=10)
+print(np.mean(cvscores_10))
+
+```
+
+## [Regularized regression](https://campus.datacamp.com/courses/supervised-learning-with-scikit-learn/regression-2?ex=11)
+![](img/2021-12-09-18-22-13.png)
+![](img/2021-12-09-18-22-39.png)
+![](img/2021-12-09-18-22-55.png)
+![](img/2021-12-09-18-23-08.png)
+![](img/2021-12-09-18-23-16.png)
+![](img/2021-12-09-18-23-23.png)
+![](img/2021-12-09-18-23-34.png)
+![](img/2021-12-09-18-23-51.png)
+![](img/2021-12-09-18-23-55.png)
+
 
 ## Regularization I: Lasso
+
+In the video, you saw how Lasso selected out the 'RM' feature as being the most important for predicting Boston house prices, while shrinking the coefficients of certain other features to 0. Its ability to perform feature selection in this way becomes even more useful when you are dealing with data involving thousands of features.
+
+In this exercise, you will fit a lasso regression to the Gapminder data you have been working with and plot the coefficients. Just as with the Boston data, you will find that the coefficients of some features are shrunk to 0, with only the most important ones remaining.
+
+The feature and target variable arrays have been pre-loaded as X and y.
+
+- Import Lasso from sklearn.linear_model.
+- Instantiate a Lasso regressor with an alpha of 0.4 and specify normalize=True.
+- Fit the regressor to the data and compute the coefficients using the coef_ attribute.
+- Plot the coefficients on the y-axis and column names on the x-axis. This has been done for you, so hit 'Submit Answer' to view the plot!
+
+```python
+**# Import Lasso
+from sklearn.linear_model import Lasso
+
+# Instantiate a lasso regressor: lasso
+lasso = Lasso(alpha=0.4, normalize=True)
+
+# Fit the regressor to the data
+lasso.fit(X, y)
+
+# Compute and print the coefficients
+lasso_coef = lasso.fit(X, y).coef_
+print(lasso_coef)
+
+# Plot the coefficients
+plt.plot(range(len(df_columns)), lasso_coef)
+plt.xticks(range(len(df_columns)), df_columns.values, rotation=60)
+plt.margins(0.02)
+plt.show()
+**
+```
 
 ## Regularization II: Ridge
 
