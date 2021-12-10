@@ -314,9 +314,36 @@ Inside the for loop:
 - Fit the classifier with k neighbors to the training data.
 - Compute accuracy scores the training set and test set separately using the .score() method and assign the results to the train_accuracy and test_accuracy arrays respectively.
 
+```python
+# Setup arrays to store train and test accuracies
+neighbors = np.arange(1, 9)
+train_accuracy = np.empty(len(neighbors))
+test_accuracy = np.empty(len(neighbors))
 
+# Loop over different values of k
+for i, k in enumerate(neighbors):
+    # Setup a k-NN Classifier with k neighbors: knn
+    knn = KNeighborsClassifier(n_neighbors=k)
 
----
+    # Fit the classifier to the training data
+    knn.fit(X_train, y_train)
+
+    #Compute accuracy on the training set
+    train_accuracy[i] = knn.score(X_train, y_train)
+
+    #Compute accuracy on the testing set
+    test_accuracy[i] = knn.score(X_test, y_test)
+
+# Generate plot
+plt.title('k-NN: Varying Number of Neighbors')
+plt.plot(neighbors, test_accuracy, label = 'Testing Accuracy')
+plt.plot(neighbors, train_accuracy, label = 'Training Accuracy')
+plt.legend()
+plt.xlabel('Number of Neighbors')
+plt.ylabel('Accuracy')
+plt.show()
+
+```
 
 
 
@@ -333,7 +360,16 @@ Inside the for loop:
 
 ## Introduction to regression
 
-VID
+![](img/2021-12-09-18-15-38.png)
+![](img/2021-12-09-18-15-50.png)
+![](img/2021-12-09-18-15-56.png)
+![](img/2021-12-09-18-16-17.png)
+![](img/2021-12-09-18-16-30.png)
+![](img/2021-12-09-18-16-35.png)
+![](img/2021-12-09-18-16-52.png)
+![](img/2021-12-09-18-17-09.png)
+
+
 
 ## Which of the following is a regression problem?
 
