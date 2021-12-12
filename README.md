@@ -690,17 +690,177 @@ Don't worry about the specifics of the above function works. The motivation behi
 	- Append the average and the standard deviation of the computed cross-validated scores. NumPy has been pre-imported for you as np.
 - Use the display_plot() function to visualize the scores and standard deviations.
 
-# 3 Fine-tuning your model
+```python
+# Import necessary modules
+from sklearn.linear_model import Ridge
+from sklearn.model_selection import cross_val_score
+
+# Setup the array of alphas and lists to store scores
+alpha_space = np.logspace(-4, 0, 50)
+ridge_scores = []
+ridge_scores_std = []
+
+# Create a ridge regressor: ridge
+ridge = Ridge(normalize=True)
+
+# Compute scores over range of alphas
+for alpha in alpha_space:
+
+    # Specify the alpha value to use: ridge.alpha
+    ridge.alpha = alpha
+
+    # Perform 10-fold CV: ridge_cv_scores
+    ridge_cv_scores = cross_val_score(ridge, X, y, cv=10)
+
+    # Append the mean of ridge_cv_scores to ridge_scores
+    ridge_scores.append(np.mean(ridge_cv_scores))
+
+    # Append the std of ridge_cv_scores to ridge_scores_std
+    ridge_scores_std.append(np.std(ridge_cv_scores))
+
+# Display the plot
+display_plot(ridge_scores, ridge_scores_std)
+```
+![](img/2021-12-12-14-32-17.png)
+
+
+# [3 Fine-tuning your model](https://campus.datacamp.com/courses/supervised-learning-with-scikit-learn/fine-tuning-your-model?ex=1)
 
 
 
 ## How good is your model?
+![](img/2021-12-12-14-32-41.png)
+![](img/2021-12-12-14-32-57.png)
+![](img/2021-12-12-14-33-27.png)
+![](img/2021-12-12-14-34-15.png)
+
+- F1 score is the *harmonic mean* of precision/recall
+- high precision means classifier has low false positive rate
+- high recall means prediction of most spam emails correctly
+
+![](img/2021-12-12-14-36-15.png)
+### KNN-ML workflow
+- import modules
+- instantiate classifier
+- split data into train and test
+- fit training data
+- predict labels of the test set
+
+![](img/2021-12-12-14-36-50.png)
+### Compute confusion matrix
+- pass test set labels and predicted labels
+
+![](img/2021-12-12-14-39-22.png)
+### Compute metrics
+- pass the same arguments to classification_report()
+![](img/2021-12-12-14-41-00.png)
+- for all metrics in Scikit learn, the first argument is always a true label, and the prediction is always the 2nd argument
+
 
 ## Metrics for classification
+In Chapter 1, you evaluated the performance of your k-NN classifier based on its accuracy. However, as Andy discussed, accuracy is not always an informative metric. In this exercise, you will dive more deeply into evaluating the performance of binary classifiers by computing a confusion matrix and generating a classification report.
 
-## Logistic regression and the ROC curve
+You may have noticed in the video that the classification report consisted of three rows, and an additional support column. The support gives the number of samples of the true response that lie in that class - so in the video example, the support was the number of Republicans or Democrats in the test set on which the classification report was computed. The precision, recall, and f1-score columns, then, gave the respective metrics for that particular class.
 
-## Building a logistic regression model
+Here, you'll work with the PIMA Indians dataset obtained from the UCI Machine Learning Repository. The goal is to predict whether or not a given female patient will contract diabetes based on features such as BMI, age, and number of pregnancies. Therefore, it is a binary classification problem. A target value of 0 indicates that the patient does not have diabetes, while a value of 1 indicates that the patient does have diabetes. As in Chapters 1 and 2, the dataset has been preprocessed to deal with missing values.
+
+The dataset has been loaded into a DataFrame df and the feature and target variable arrays X and y have been created for you. In addition, sklearn.model_selection.train_test_split and sklearn.neighbors.KNeighborsClassifier have already been imported.
+
+Your job is to train a k-NN classifier to the data and evaluate its performance by generating a confusion matrix and classification report.
+
+- Import classification_report and confusion_matrix from sklearn.metrics.
+- Create training and testing sets with 40% of the data used for testing. Use a random state of 42.
+- Instantiate a k-NN classifier with 6 neighbors, fit it to the training data, and predict the labels of the test set.
+- Compute and print the confusion matrix and classification report using the confusion_matrix() and classification_report() functions.
+
+```python
+# Import necessary modules
+from sklearn.metrics import classification_report
+from sklearn.metrics import confusion_matrix
+
+# Create training and test set
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.4, random_state=42)
+
+# Instantiate a k-NN classifier: knn
+knn = KNeighborsClassifier(n_neighbors=6)
+
+# Fit the classifier to the training data
+knn.fit(X_train, y_train)
+
+# Predict the labels of the test data: y_pred
+y_pred = knn.predict(X_test)
+
+# Generate the confusion matrix and classification report
+print(confusion_matrix(y_test, y_pred))
+print(classification_report(y_test, y_pred))
+
+```
+
+## [Logistic regression and the ROC curve](https://campus.datacamp.com/courses/supervised-learning-with-scikit-learn/fine-tuning-your-model?ex=3)
+![](img/2021-12-12-15-08-53.png)
+- log reg will ouput probability p with respect to target variable
+- if p>0.5, label data as "1", else "0"
+
+![](img/2021-12-12-15-10-18.png)
+
+- log reg produces a linear decision boundary
+
+![](img/2021-12-12-15-10-45.png)
+
+- log reg uses same formula as lin reg in sklearn
+  1. import
+  2. instantiate classifier
+  3. split data into training/test
+  4. fit model on training data
+  5. predict on test set
+
+![](img/2021-12-12-15-12-31.png)
+
+
+- in log reg, we specify probability threshold of 0.5, which defines our model (?).  Not specific to log reg but also KNN
+
+![](img/2021-12-12-15-13-53.png)
+
+- if threshold is varied, what happens to true/false positive rates?
+- if p=0, model predicts 1, meaning true positive rate is equal to false positive rate, is equal to one
+- if p=1, model predicts 0, meaning both true and false positive rates are 0.
+
+![](img/2021-12-12-15-16-14.png)
+
+- if you vary the threshold between the two extremes you get a series of different true/false positive rates
+
+![](img/2021-12-12-15-16-48.png)
+
+- these set of points we get when trying all possible thresholds is called `receiving operator characteristic` curve, or `ROC` curve
+
+![](img/2021-12-12-15-17-30.png)
+
+### Plotting ROC curve
+1. import roc_curve
+2. call function roc_curve with first argument being the actual labels (y_test, the 2nd, predictor probabilities)
+3. returns 3 variables:
+   - fpr: false positive rate
+   - tpr: true positive rate
+   - thresholds
+
+![](img/2021-12-12-15-20-43.png)
+
+4. plot fpr and tpr w/ pyplot
+
+![](img/2021-12-12-15-21-20.png)
+![](img/2021-12-12-15-23-06.png)
+
+- We use the predicted probabilities of the model, assigning a value of one to the observation in question, this is because to compute the ROC, we don't just want the predictions on the test set, we also want the probability that the logreg model outputs before using a threshold to predict the label
+- to do this we apply the method: `logreg.predict_proba(X_test)[:,1]`
+- this returns an array with 2 columns
+- each column contains the probabilities of the respective target values
+- we choose 2nd column (index 1), the probabilities of the predicted labels being one...
+
+![](img/2021-12-12-15-28-02.png)
+
+
+
+## [Building a logistic regression model](https://campus.datacamp.com/courses/supervised-learning-with-scikit-learn/fine-tuning-your-model?ex=4)
 
 ## Plotting an ROC curve
 
