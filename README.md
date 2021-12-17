@@ -862,6 +862,20 @@ print(classification_report(y_test, y_pred))
 
 ## [Building a logistic regression model](https://campus.datacamp.com/courses/supervised-learning-with-scikit-learn/fine-tuning-your-model?ex=4)
 
+Time to build your first logistic regression model! As Hugo showed in the video, scikit-learn makes it very easy to try different models, since the Train-Test-Split/Instantiate/Fit/Predict paradigm applies to all classifiers and regressors - which are known in scikit-learn as 'estimators'. You'll see this now for yourself as you train a logistic regression model on exactly the same data as in the previous exercise. Will it outperform k-NN? There's only one way to find out!
+
+The feature and target variable arrays X and y have been pre-loaded, and train_test_split has been imported for you from sklearn.model_selection.
+
+- Import: LogisticRegression from sklearn.linear_model, confusion_matrix and classification_report from sklearn.metrics.
+- Create training and test sets with 40% (or 0.4) of the data used for testing. Use a random state of 42. This has been done for you.
+- Instantiate a LogisticRegression classifier called logreg.
+- Fit the classifier to the training data and predict the labels of the test set.
+- Compute and print the confusion matrix and classification report. This has been done for you, so hit 'Submit Answer' to see how logistic regression compares to k-NN!
+
+```python
+
+```
+
 ## Plotting an ROC curve
 
 ## Precision-recall Curve
